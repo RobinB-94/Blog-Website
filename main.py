@@ -15,7 +15,7 @@ from dotenv import load_dotenv
 load_dotenv()
 
 app = Flask(__name__)
-app.config['SECRET_KEY'] = os.environ.get('SECRET_KEY')
+app.config['SECRET_KEY'] = os.getenv('SECRET_KEY')
 ckeditor = CKEditor(app)
 Bootstrap(app)
 gravatar = Gravatar(app, size=100, rating='g', default='retro', force_default=False, force_lower=False, use_ssl=False, base_url=None)
@@ -32,7 +32,7 @@ def admin_only(function):
     @wraps(function)
     def decorated_function(*args, **kwargs):
         #If User is not an Admin return abort with 403 error
-        if current_user.id != 1:
+        if current_user.id != os.getenv("ADMIN"):
             return abort(403)
         #Otherwise continue with the route function
         return function(*args, **kwargs)
@@ -41,7 +41,7 @@ def admin_only(function):
 
 
 ##CONNECT TO DB
-app.config['SQLALCHEMY_DATABASE_URI'] = os.environ.get("DATABASE_URL")
+app.config['SQLALCHEMY_DATABASE_URI'] = os.getenv("DB")
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 db = SQLAlchemy(app)
 
@@ -128,7 +128,7 @@ def register():
             return redirect(url_for('login'))
         hash_and_salted_password = generate_password_hash(
             register_form.password.data,
-            method=os.environ.get("PW_HASH_METHOD"),
+            method=os.getenv("PW_HASH_METHOD"),
             salt_length=8
         )
         new_user = User(
