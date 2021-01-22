@@ -39,7 +39,6 @@ def admin_only(function):
     return decorated_function
 
 
-
 ##CONNECT TO DB
 app.config['SQLALCHEMY_DATABASE_URI'] = os.environ.get("DATABASE_URL")
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
