@@ -113,8 +113,9 @@ class Comment(db.Model):
 
 @app.route('/')
 def get_all_posts():
+    test=os.environ.get("TESTA")
     posts = BlogPost.query.all()
-    return render_template("index.html", all_posts=posts, current_user=current_user)
+    return render_template("index.html", all_posts=posts, current_user=current_user, test=test)
 
 
 @app.route('/register', methods=["GET", "POST"])
